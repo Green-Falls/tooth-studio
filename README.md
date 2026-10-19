@@ -30,6 +30,11 @@ Upload the `site/` folder to any static host (Netlify, Cloudflare Pages, GitHub 
 
 The idea is an appointment card. Her logo is a ruled card with spaced caps beneath the script, and every patient leaves a dental visit holding one. Cards on the home page, booking page and contact page use a double rule, spaced-caps field labels and italic "written-in" values. Ink on paper, with one accent: the teal of the 55 Main Street sign. Newsreader for headings, Public Sans for text, both self-hosted.
 
+## House rules
+
+- **No captions on photos.** `build.py` refuses to build a page with one. Any context a photo needs goes in the page's own text or headings. Attributions on review quotes are not photo captions and stay.
+- Because of that, photos of the first studio at 82 Main Street appear only on the About page, under the "Opening weekend, November 2024" heading, so they can't be taken for the current office.
+
 ## Sources and QA
 
 - Every fact comes from `data/research/facebook/NOTES.md` and `MANIFEST.csv`.
@@ -37,7 +42,7 @@ The idea is an appointment card. Her logo is a ruled card with spaced caps benea
 
 ## To confirm with Rytel before launch
 
-1. **Photos of the current studio.** All interior photos are from 82 Main Street and are captioned that way. Shoot the treatment room and waiting area at 55 Main Street.
+1. **Photos of the current studio.** All interior photos are from 82 Main Street, so they only appear on the About page. Shoot the treatment room and waiting area at 55 Main Street; the Services page has no photo until then.
 2. **Hours.** None are published. The site says there are no fixed hours, and mentions Sunday visits only because reviewers do.
 3. **Membership plan and whitening price.** What the plan includes and costs; whether to show a whitening price.
 4. **Service and whitening wording.** The cleaning, fluoride and sealant descriptions and the four whitening steps describe standard practice. Check them against how she works. Her whitening graphics include her own "up to 14 shades brighter" claim.

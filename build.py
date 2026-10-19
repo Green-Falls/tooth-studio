@@ -150,6 +150,12 @@ def build():
             raise SystemExit(f"{src.name}: missing JSON front matter")
         meta = json.loads(m.group(1))
         body = text[m.end():]
+        # House rule: photos never get captions. Review attributions (figures with no image) are fine.
+        for fig in re.findall(r"<figure.*?</figure>", body, re.S):
+            if "<img" in fig and "<figcaption" in fig:
+                raise SystemExit(f"{src.name}: photo has a caption; photos never get captions")
+        if "hero-caption" in body:
+            raise SystemExit(f"{src.name}: photo caption (hero-caption); photos never get captions")
         current = meta.get("nav", "")
         fill = dict(site=SITE, phone=PHONE, tel=TEL)
         url = f"{SITE_URL}/{'' if src.name == 'index.html' else src.name}" if SITE_URL else ""

@@ -114,7 +114,6 @@ li { margin-bottom: .35em; }
 .hero-stage { position: relative; margin-top: clamp(28px, 4vw, 48px); }
 .hero-stage .photo img { width: 100%; aspect-ratio: 2.32 / 1; object-fit: cover; object-position: 20% 50%; }
 .hero-stage .card { position: absolute; right: 0; bottom: -64px; width: min(420px, 42%); }
-.hero-caption { padding: 10px 0 0; font-size: .85rem; color: var(--muted); max-width: calc(58% - 24px); }
 .after-hero { height: 64px; }
 
 .statement { padding: clamp(56px, 8vw, 104px) 0; border-bottom: 1px solid var(--hair); }
@@ -275,7 +274,6 @@ figcaption { font-size: .85rem; color: var(--muted); padding-top: 9px; max-width
   .menu a[aria-current="page"] { font-weight: 600; }
 
   .hero-stage .card { position: relative; right: auto; bottom: auto; width: auto; margin: -48px 18px 0; }
-  .hero-caption { max-width: none; padding: 10px 0 0; }
   .after-hero { height: 0; }
   .book-grid .card { position: static; }
   .steps { grid-template-columns: 1fr 1fr; }

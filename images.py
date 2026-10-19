@@ -19,7 +19,6 @@ PHOTOS = {
     "main-street-sign": ("2025-10-05_fb-page_2.jpg", (0.0, 0.17, 1.0, 0.765)),
     "55-main-street": ("2025-10-05_fb-page_1.jpg", (0.0, 0.08, 1.0, 0.92)),
     "82-main-door": ("2024-11-23_fb-page_6.jpg", None),
-    "operatory": ("2024-11-23_fb-page_11.jpg", None),
     "waiting-room": ("2024-11-23_fb-page_2.jpg", None),
     "letterboard": ("2024-11-23_fb-page_4.jpg", None),
     "open-house-cookies": ("2024-11-23_fb-page_3.jpg", None),

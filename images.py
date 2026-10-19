@@ -15,9 +15,9 @@ WIDTHS = (480, 800, 1200, 1600)
 
 # name: (source file, crop box as fractions (left, top, right, bottom) or None)
 PHOTOS = {
-    # Crop keeps the 55 Main Street sign and the trees, and leaves out a campaign yard sign at the bottom.
-    "main-street-sign": ("2025-10-05_fb-page_2.jpg", (0.0, 0.17, 1.0, 0.765)),
     "55-main-street": ("2025-10-05_fb-page_1.jpg", (0.0, 0.08, 1.0, 0.92)),
+    # Home hero: the porch, the 55 oval and the building sign listing the studio.
+    "entrance": ("2025-10-05_fb-page_1.jpg", (0.0, 0.245, 1.0, 0.775)),
     "82-main-door": ("2024-11-23_fb-page_6.jpg", None),
     "waiting-room": ("2024-11-23_fb-page_2.jpg", None),
     "letterboard": ("2024-11-23_fb-page_4.jpg", None),

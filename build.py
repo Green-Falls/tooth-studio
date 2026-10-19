@@ -3,7 +3,7 @@
 
 Each page file starts with one line of JSON in an HTML comment:
   <!-- {"title": "...", "description": "...", "nav": "services"} -->
-Optional keys: "book": false hides the closing booking strip, "scripts": ["book.js"],
+Optional keys: "scripts": ["form.js"],
 "noindex": true keeps a page out of search and the sitemap.
 
 Photos: write <img src="img/NAME.jpg" sizes="..."> and the build adds a srcset of the
@@ -23,6 +23,11 @@ OUT = ROOT / "site"
 # images and the sitemap.
 SITE_URL = ""
 
+# The contact form posts here. Create a form at formspree.io (or any service that
+# accepts a JSON POST and answers {"ok": true}) and paste its URL, for example
+# "https://formspree.io/f/abcdwxyz". Left empty, the form says it isn't connected.
+FORM_ENDPOINT = ""
+
 SITE = "Tooth Studio & Wellness"
 PHONE = "(207) 599-6459"
 TEL = "+12075996459"
@@ -30,7 +35,6 @@ TEL = "+12075996459"
 NAV = [
     ("services", "services.html", "Services"),
     ("whitening", "whitening.html", "Whitening"),
-    ("outside", "care-outside-the-studio.html", "Care outside the studio"),
     ("new", "new-patients.html", "New patients"),
     ("about", "about.html", "About"),
     ("contact", "contact.html", "Contact"),
@@ -51,39 +55,24 @@ HEAD = """<!doctype html>
 <meta name="theme-color" content="#fbfaf6">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
-<link rel="preload" href="fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/public-sans.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/jost.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/source-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  <div class="topline"><div class="wrap">
-    <span>55 Main Street, 1st floor, Bridgton, Maine</span>
-    <span>Call or text <a href="tel:{tel}">{phone}</a></span>
-  </div></div>
   <div class="wrap header-inner">
     <a class="brand" href="index.html"><img src="img/logo.png" alt="{site}, dental hygiene care" width="556" height="158"></a>
     <nav class="nav" aria-label="Main"><ul>{nav}</ul></nav>
-    <a class="button primary small header-book" href="book.html"{book_current}>Book a visit</a>
-    <details class="menu"><summary>Menu</summary><ul>{nav_menu}</ul></details>
+    <div class="header-actions">
+      <a class="header-phone" href="tel:{tel}">{phone}</a>
+      <a class="button primary small header-book" href="contact.html#request">Request a visit</a>
+      <details class="menu"><summary>Menu</summary><ul>{nav_menu}<li><a href="contact.html#request">Request a visit</a></li><li><a href="tel:{tel}">Call {phone}</a></li></ul></details>
+    </div>
   </div>
 </header>
 <main id="main">
-"""
-
-BOOK = """<section class="book-strip" aria-label="Book a visit">
-  <div class="wrap">
-    <div>
-      <h2>Book by text</h2>
-      <p>Answer a few questions and the site writes the text for you. Or call {phone}.</p>
-    </div>
-    <div class="buttons">
-      <a class="button primary" href="book.html">Write my text</a>
-      <a class="button" href="tel:{tel}">Call {phone}</a>
-    </div>
-  </div>
-</section>
 """
 
 FOOT = """</main>
@@ -149,7 +138,9 @@ def build():
         if not m:
             raise SystemExit(f"{src.name}: missing JSON front matter")
         meta = json.loads(m.group(1))
-        body = text[m.end():]
+        body = text[m.end():].replace(
+            "{form_action}", f'action="{FORM_ENDPOINT}"' if FORM_ENDPOINT else ""
+        )
         # House rule: photos never get captions. Review attributions (figures with no image) are fine.
         for fig in re.findall(r"<figure.*?</figure>", body, re.S):
             if "<img" in fig and "<figcaption" in fig:
@@ -164,18 +155,15 @@ def build():
             description=meta["description"],
             robots='<meta name="robots" content="noindex">\n' if meta.get("noindex") else "",
             canonical=f'<link rel="canonical" href="{url}">\n' if url else "",
-            og_image=f"{SITE_URL}/img/main-street-sign-1200.webp" if SITE_URL else "img/main-street-sign-1200.webp",
+            og_image=f"{SITE_URL}/img/entrance-1200.webp" if SITE_URL else "img/entrance-1200.webp",
             nav=nav_items(current, NAV),
-            nav_menu=nav_items(current, [("home", "index.html", "Home")] + NAV + [("book", "book.html", "Book a visit")]),
-            book_current=' aria-current="page"' if current == "book" else "",
+            nav_menu=nav_items(current, [("home", "index.html", "Home")] + NAV),
             **fill,
         )
         html += body
-        if meta.get("book", True):
-            html += BOOK.format(**fill)
         scripts = "".join(f'<script src="{s}" defer></script>\n' for s in meta.get("scripts", []))
         html += FOOT.format(
-            nav_footer=nav_items(None, [("home", "index.html", "Home")] + NAV + [("book", "book.html", "Book a visit")]),
+            nav_footer=nav_items(None, [("home", "index.html", "Home")] + NAV),
             scripts=scripts,
             **fill,
         )

@@ -1,43 +1,124 @@
-<!-- {"title": "Contact and directions | Tooth Studio & Wellness, Bridgton", "description": "Tooth Studio & Wellness, 55 Main Street, 1st floor, Bridgton, ME 04009. Call or text (207) 599-6459 or email toothstudiomaine@gmail.com.", "nav": "contact", "book": false, "scripts": ["map.js"]} -->
+<!-- {"title": "Request a visit | Tooth Studio & Wellness, Bridgton", "description": "Request a dental hygiene appointment at Tooth Studio & Wellness, 55 Main Street, Bridgton, Maine. Or call or text (207) 599-6459.", "nav": "contact", "scripts": ["form.js", "map.js"]} -->
 <section class="page-head">
-  <div class="wrap">
-    <h1>Contact</h1>
-    <p class="lead">Text or call (207) 599-6459, or email the studio.</p>
+  <div class="wrap request" id="request">
+    <div class="request-intro">
+      <h1>Request a visit</h1>
+      <p class="lead">Send a few details and Rytel will text or call you back to set a time.</p>
+      <ul class="checks">
+        <li><strong>New patients welcome.</strong> Adults and children.</li>
+        <li><strong>Delta Dental and MaineCare.</strong> In network with every Delta Dental plan, including Martin's Point.</li>
+        <li><strong>Easy to get in.</strong> Ramp entrance on Main Street, accessible parking behind the building.</li>
+      </ul>
+    </div>
+
+    <div class="request-facts">
+      <dl class="facts">
+        <div><dt>Call or text</dt><dd><a href="tel:+12075996459">(207) 599-6459</a></dd></div>
+        <div><dt>Email</dt><dd><a href="mailto:toothstudiomaine@gmail.com">toothstudiomaine@gmail.com</a></dd></div>
+        <div><dt>Address</dt><dd>55 Main Street, 1st floor<br>Bridgton, ME 04009</dd></div>
+        <div><dt>Social</dt><dd><a href="https://www.facebook.com/profile.php?id=61562688787508">Facebook</a> · <a href="https://www.instagram.com/toothstudioandwellness/">Instagram</a></dd></div>
+      </dl>
+    </div>
+
+    <div class="form-card">
+      <form class="form" id="request-form" method="post" {form_action} novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="f-name">Name</label>
+            <input type="text" id="f-name" name="name" autocomplete="name" required aria-describedby="e-name">
+            <p class="error" id="e-name"></p>
+          </div>
+          <div class="field">
+            <label for="f-phone">Phone</label>
+            <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel" placeholder="207 555 0123" required aria-describedby="e-phone">
+            <p class="error" id="e-phone"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-email">Email <span class="optional">optional</span></label>
+          <input type="email" id="f-email" name="email" autocomplete="email" aria-describedby="e-email">
+          <p class="error" id="e-email"></p>
+        </div>
+
+        <fieldset class="field">
+          <legend>What's it for?</legend>
+          <div class="chips">
+            <label><input type="radio" name="reason" value="Cleaning and checkup" checked><span>Cleaning and checkup</span></label>
+            <label><input type="radio" name="reason" value="Child's visit"><span>Child's visit</span></label>
+            <label><input type="radio" name="reason" value="Whitening"><span>Whitening</span></label>
+            <label><input type="radio" name="reason" value="Visit at a care facility"><span>Visit at a care facility</span></label>
+            <label><input type="radio" name="reason" value="A question"><span>A question</span></label>
+          </div>
+        </fieldset>
+
+        <div class="row">
+          <div class="field">
+            <label for="f-insurance">Insurance</label>
+            <select id="f-insurance" name="insurance">
+              <option>Delta Dental</option>
+              <option>Martin's Point (through Delta Dental)</option>
+              <option>MaineCare</option>
+              <option>Medicare</option>
+              <option>Another plan</option>
+              <option>No insurance</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-when">When suits</label>
+            <select id="f-when" name="when">
+              <option>Any time</option>
+              <option>Weekday mornings</option>
+              <option>Weekday afternoons</option>
+              <option>Weekends</option>
+            </select>
+          </div>
+        </div>
+
+        <fieldset class="field">
+          <legend>Best way to reach you</legend>
+          <div class="segmented">
+            <label><input type="radio" name="reply_by" value="Text" checked><span>Text</span></label>
+            <label><input type="radio" name="reply_by" value="Call"><span>Call</span></label>
+            <label><input type="radio" name="reply_by" value="Email"><span>Email</span></label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label for="f-note">Anything else <span class="optional">optional</span></label>
+          <textarea id="f-note" name="message" rows="3" placeholder="Times that don't work, or a question for Rytel" aria-describedby="h-note"></textarea>
+          <p class="hint" id="h-note">Please keep private health details for the visit.</p>
+        </div>
+
+        <p class="trap" aria-hidden="true"><label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label></p>
+        <button class="button primary submit" type="submit">Send request</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="sent" id="sent" hidden tabindex="-1">
+        <h2>Request sent</h2>
+        <p>Thanks<span data-sent-name></span>. Rytel will reach you by <span data-sent-reply>text</span> at <strong data-sent-phone></strong> to set a time.</p>
+        <p class="muted">Need to change something? Call or text <a href="tel:+12075996459">(207) 599-6459</a>.</p>
+      </div>
+    </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="wrap contact-grid">
-    <div class="card">
-      <div class="card-head"><img src="img/logo.png" alt="Tooth Studio &amp; Wellness, dental hygiene care" width="556" height="158"></div>
-      <div class="card-line"><span class="caps">Address</span><span class="ink">55 Main Street, 1st floor<br>Bridgton, ME 04009</span></div>
-      <div class="card-line"><span class="caps">Call or text</span><span class="ink"><a href="tel:+12075996459">(207) 599-6459</a></span></div>
-      <div class="card-line"><span class="caps">Email</span><span class="ink"><a href="mailto:toothstudiomaine@gmail.com">toothstudiomaine@gmail.com</a></span></div>
-      <div class="card-line"><span class="caps">Facebook</span><span class="ink"><a href="https://www.facebook.com/profile.php?id=61562688787508">Tooth Studio &amp; Wellness</a></span></div>
-      <div class="card-line"><span class="caps">Instagram</span><span class="ink"><a href="https://www.instagram.com/toothstudioandwellness/">@toothstudioandwellness</a></span></div>
-      <div class="buttons"><a class="button primary" href="book.html">Write my text</a><a class="button" href="https://www.google.com/maps/search/?api=1&amp;query=Tooth+Studio+%26+Wellness&amp;query_place_id=ChIJgU3LhvBTskwR1r2hOYnxwyM">Directions</a></div>
-    </div>
+  <div class="wrap split">
     <div>
-      <div class="map-box" id="map">
-        <div>
-          <p>The map comes from Google, so it only loads if you ask for it.</p>
-          <button class="button" type="button" id="load-map" data-src="https://www.google.com/maps?q=55+Main+Street,+Bridgton,+ME+04009&amp;output=embed">Show the map</button>
-        </div>
-      </div>
-      <p style="margin-top:18px">The building is gray, with a covered wooden ramp at the front. Look for the green 55 sign by the road.</p>
+      <h2>Finding the door</h2>
+      <p>The building is gray, with a covered wooden ramp under a teal 55 sign. The studio is on the first floor, and accessible parking is behind the building.</p>
+      <div class="buttons"><a class="button" href="https://www.google.com/maps/search/?api=1&amp;query=Tooth+Studio+%26+Wellness&amp;query_place_id=ChIJgU3LhvBTskwR1r2hOYnxwyM">Get directions</a></div>
+      <figure style="margin-top:28px">
+        <img src="img/55-main-street.jpg" sizes="(max-width: 760px) 100vw, 545px" alt="The front of 55 Main Street with its covered ramp entrance and building sign" width="1536" height="1721" loading="lazy">
+      </figure>
     </div>
-  </div>
-</section>
-
-<section class="section tint">
-  <div class="wrap">
-    <div class="pair">
-      <figure>
-        <img src="img/55-main-street.jpg" sizes="(max-width: 520px) 100vw, 580px" alt="The front of 55 Main Street with its covered ramp entrance" width="1536" height="1721" loading="lazy">
-      </figure>
-      <figure>
-        <img src="img/main-street-sign.jpg" sizes="(max-width: 520px) 100vw, 580px" alt="The roadside sign for 55 Main Street, Bridgton" width="1976" height="851" loading="lazy" style="object-position: 14% 50%">
-      </figure>
+    <div class="map-box" id="map">
+      <div>
+        <p>The map comes from Google, so it only loads if you ask for it.</p>
+        <button class="button" type="button" id="load-map" data-src="https://www.google.com/maps?q=55+Main+Street,+Bridgton,+ME+04009&amp;output=embed">Show the map</button>
+      </div>
     </div>
   </div>
 </section>

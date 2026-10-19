@@ -3,7 +3,13 @@
 
 Each page file starts with one line of JSON in an HTML comment:
   <!-- {"title": "...", "description": "...", "nav": "services"} -->
-Output goes to site/<same name>.html. Run: python3 build.py
+Optional keys: "book": false hides the closing booking strip, "scripts": ["book.js"],
+"noindex": true keeps a page out of search and the sitemap.
+
+Photos: write <img src="img/NAME.jpg" sizes="..."> and the build adds a srcset of the
+WebP files images.py made for NAME. Run images.py first if photos changed.
+
+Output goes to site/. Run: python3 build.py
 """
 import json
 import pathlib
@@ -12,6 +18,10 @@ import re
 ROOT = pathlib.Path(__file__).parent
 PAGES = ROOT / "pages"
 OUT = ROOT / "site"
+
+# Set this once the domain is live; it turns on canonical links, absolute share
+# images and the sitemap.
+SITE_URL = ""
 
 SITE = "Tooth Studio & Wellness"
 PHONE = "(207) 599-6459"
@@ -33,40 +43,44 @@ HEAD = """<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{description}">
+{robots}{canonical}<meta property="og:type" content="website">
+<meta property="og:site_name" content="{site}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
-<meta property="og:image" content="img/55-main-street.jpg">
+<meta property="og:image" content="{og_image}">
+<meta name="theme-color" content="#fbfaf6">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preload" href="fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/public-sans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="styles.css">
-{extra_head}</head>
+</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="topline"><div class="wrap">
-  <span>55 Main Street, 1st floor, Bridgton, Maine</span>
-  <span>Call or text <a href="tel:{tel}">{phone}</a></span>
-</div></div>
 <header class="site-header">
+  <div class="topline"><div class="wrap">
+    <span>55 Main Street, 1st floor, Bridgton, Maine</span>
+    <span>Call or text <a href="tel:{tel}">{phone}</a></span>
+  </div></div>
   <div class="wrap header-inner">
     <a class="brand" href="index.html"><img src="img/logo.png" alt="{site}, dental hygiene care" width="556" height="158"></a>
     <nav class="nav" aria-label="Main"><ul>{nav}</ul></nav>
-    <details class="menu"><summary>Menu</summary><ul>{nav_home}{nav}</ul></details>
+    <a class="button primary small header-book" href="book.html"{book_current}>Book a visit</a>
+    <details class="menu"><summary>Menu</summary><ul>{nav_menu}</ul></details>
   </div>
 </header>
 <main id="main">
 """
 
-BOOK = """<section class="book" aria-label="Book a visit">
+BOOK = """<section class="book-strip" aria-label="Book a visit">
   <div class="wrap">
     <div>
-      <h2>Book by text or phone</h2>
-      <p>Rytel answers texts at {phone}. You can also message the studio on Facebook or Instagram.</p>
+      <h2>Book by text</h2>
+      <p>Answer a few questions and the site writes the text for you. Or call {phone}.</p>
     </div>
     <div class="buttons">
-      <a class="button primary" href="sms:{tel}">Text {phone}</a>
-      <a class="button" href="tel:{tel}">Call</a>
+      <a class="button primary" href="book.html">Write my text</a>
+      <a class="button" href="tel:{tel}">Call {phone}</a>
     </div>
   </div>
 </section>
@@ -83,7 +97,7 @@ FOOT = """</main>
       <div>
         <h2>Contact</h2>
         <ul>
-          <li><a href="tel:{tel}">{phone}</a> (call or text)</li>
+          <li><a href="tel:{tel}">{phone}</a>, call or text</li>
           <li><a href="mailto:toothstudiomaine@gmail.com">toothstudiomaine@gmail.com</a></li>
           <li><a href="https://www.facebook.com/profile.php?id=61562688787508">Facebook</a> · <a href="https://www.instagram.com/toothstudioandwellness/">Instagram</a></li>
         </ul>
@@ -96,13 +110,14 @@ FOOT = """</main>
     <p class="legal">Tooth Studio &amp; Wellness LLC. Rytel Rowe, Independent Practice Dental Hygienist. In network with all Delta Dental plans and MaineCare.</p>
   </div>
 </footer>
-</body>
+{scripts}</body>
 </html>
 """
 
+IMG = re.compile(r'<img src="img/([a-z0-9-]+)\.jpg"([^>]*)>')
 
-def nav_items(current, home=False):
-    items = [("home", "index.html", "Home")] if home else NAV
+
+def nav_items(current, items):
     out = []
     for key, href, label in items:
         cur = ' aria-current="page"' if key == current else ""
@@ -110,7 +125,24 @@ def nav_items(current, home=False):
     return "".join(out)
 
 
+def add_srcset(html):
+    def repl(m):
+        name, rest = m.group(1), m.group(2)
+        variants = sorted(
+            (p for p in OUT.glob(f"img/{name}-*.webp") if re.fullmatch(rf"{re.escape(name)}-\d+", p.stem)),
+            key=lambda p: int(p.stem.rsplit("-", 1)[1]),
+        )
+        if not variants:
+            raise SystemExit(f"no WebP files for img/{name}.jpg; run images.py")
+        srcset = ", ".join(f"img/{p.name} {p.stem.rsplit('-', 1)[1]}w" for p in variants)
+        if "sizes=" not in rest:
+            rest = ' sizes="(max-width: 760px) 100vw, 50vw"' + rest
+        return f'<img src="img/{name}.jpg" srcset="{srcset}"{rest}>'
+    return IMG.sub(repl, html)
+
+
 def build():
+    built = []
     for src in sorted(PAGES.glob("*.html")):
         text = src.read_text()
         m = re.match(r"<!--\s*(\{.*?\})\s*-->\n", text, re.S)
@@ -120,20 +152,48 @@ def build():
         body = text[m.end():]
         current = meta.get("nav", "")
         fill = dict(site=SITE, phone=PHONE, tel=TEL)
+        url = f"{SITE_URL}/{'' if src.name == 'index.html' else src.name}" if SITE_URL else ""
         html = HEAD.format(
             title=meta["title"],
             description=meta["description"],
-            extra_head=meta.get("head", ""),
-            nav=nav_items(current),
-            nav_home=nav_items(current, home=True),
+            robots='<meta name="robots" content="noindex">\n' if meta.get("noindex") else "",
+            canonical=f'<link rel="canonical" href="{url}">\n' if url else "",
+            og_image=f"{SITE_URL}/img/main-street-sign-1200.webp" if SITE_URL else "img/main-street-sign-1200.webp",
+            nav=nav_items(current, NAV),
+            nav_menu=nav_items(current, [("home", "index.html", "Home")] + NAV + [("book", "book.html", "Book a visit")]),
+            book_current=' aria-current="page"' if current == "book" else "",
             **fill,
         )
         html += body
         if meta.get("book", True):
             html += BOOK.format(**fill)
-        html += FOOT.format(nav_footer=nav_items(None, home=True) + nav_items(None), **fill)
-        (OUT / src.name).write_text(html)
+        scripts = "".join(f'<script src="{s}" defer></script>\n' for s in meta.get("scripts", []))
+        html += FOOT.format(
+            nav_footer=nav_items(None, [("home", "index.html", "Home")] + NAV + [("book", "book.html", "Book a visit")]),
+            scripts=scripts,
+            **fill,
+        )
+        head, body_html = html.split("<body>", 1)
+        # Keep the phone number on one line wherever it appears as text.
+        chunks = re.split(r"(<script.*?</script>)", body_html, flags=re.S)
+        body_html = "".join(
+            c if c.startswith("<script") else c.replace("(207) 599-6459", '<span class="nw">(207) 599-6459</span>')
+            for c in chunks
+        )
+        (OUT / src.name).write_text(add_srcset(head + "<body>" + body_html))
+        if not meta.get("noindex"):
+            built.append(src.name)
         print("built", src.name)
+
+    robots = "User-agent: *\nAllow: /\n"
+    if SITE_URL:
+        urls = "\n".join(f"  <url><loc>{SITE_URL}/{'' if n == 'index.html' else n}</loc></url>" for n in built)
+        (OUT / "sitemap.xml").write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}\n</urlset>\n'
+        )
+        robots += f"Sitemap: {SITE_URL}/sitemap.xml\n"
+    (OUT / "robots.txt").write_text(robots)
 
 
 if __name__ == "__main__":

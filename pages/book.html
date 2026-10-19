@@ -1,0 +1,96 @@
+<!-- {"title": "Book a visit | Tooth Studio & Wellness, Bridgton", "description": "Book a dental hygiene appointment at Tooth Studio & Wellness in Bridgton, Maine. Answer a few questions and the site writes the text message for you.", "nav": "book", "book": false, "scripts": ["book.js"]} -->
+<section class="page-head">
+  <div class="wrap">
+    <h1>Book a visit</h1>
+    <p class="lead">Rytel books appointments by text. Answer a few questions and this page writes the message for you. Nothing you type here is sent anywhere until you send the text yourself.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap book-grid">
+    <form class="form" id="book-form" novalidate>
+      <fieldset>
+        <label class="label" for="f-name">Your name</label>
+        <input type="text" id="f-name" name="name" autocomplete="name">
+      </fieldset>
+
+      <fieldset>
+        <legend>Who is the appointment for?</legend>
+        <div class="choices">
+          <label><input type="radio" name="who" value="me" checked><span>Me</span></label>
+          <label><input type="radio" name="who" value="child"><span>My child</span></label>
+          <label><input type="radio" name="who" value="family"><span>More than one of us</span></label>
+          <label><input type="radio" name="who" value="facility"><span>Someone in a care facility</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Have you been to Tooth Studio before?</legend>
+        <div class="choices">
+          <label><input type="radio" name="returning" value="no" checked><span>No, new patient</span></label>
+          <label><input type="radio" name="returning" value="yes"><span>Yes</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>What would you like?</legend>
+        <div class="choices">
+          <label><input type="checkbox" name="what" value="cleaning" checked><span>Cleaning and checkup</span></label>
+          <label><input type="checkbox" name="what" value="whitening"><span>Whitening</span></label>
+          <label><input type="checkbox" name="what" value="unsure"><span>Not sure yet</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label class="label" for="f-insurance">Insurance</label>
+        <select id="f-insurance" name="insurance">
+          <option value="delta">Delta Dental</option>
+          <option value="martins">Martin's Point (through Delta Dental)</option>
+          <option value="mainecare">MaineCare</option>
+          <option value="medicare">Medicare</option>
+          <option value="other">Another plan</option>
+          <option value="none">No insurance</option>
+        </select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Days that work <span class="hint">Pick any. Rytel will reply with open times.</span></legend>
+        <div class="choices">
+          <label><input type="checkbox" name="day" value="Monday"><span>Mon</span></label>
+          <label><input type="checkbox" name="day" value="Tuesday"><span>Tue</span></label>
+          <label><input type="checkbox" name="day" value="Wednesday"><span>Wed</span></label>
+          <label><input type="checkbox" name="day" value="Thursday"><span>Thu</span></label>
+          <label><input type="checkbox" name="day" value="Friday"><span>Fri</span></label>
+          <label><input type="checkbox" name="day" value="Saturday"><span>Sat</span></label>
+          <label><input type="checkbox" name="day" value="Sunday"><span>Sun</span></label>
+        </div>
+        <div class="choices" style="margin-top:8px">
+          <label><input type="checkbox" name="time" value="morning"><span>Morning</span></label>
+          <label><input type="checkbox" name="time" value="afternoon"><span>Afternoon</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <label class="label" for="f-note">Anything else? <span class="hint">Optional. Keep private health details for the visit.</span></label>
+        <textarea id="f-note" name="note"></textarea>
+      </fieldset>
+    </form>
+
+    <div class="card" aria-labelledby="card-title">
+      <div class="card-head"><img src="img/logo.png" alt="Tooth Studio &amp; Wellness, dental hygiene care" width="556" height="158"></div>
+      <h2 class="visually-hidden" id="card-title">Your message</h2>
+      <div class="card-line"><span class="caps">Patient</span><span class="ink" data-out="who">You</span></div>
+      <div class="card-line"><span class="caps">Visit</span><span class="ink" data-out="what">Cleaning and checkup</span></div>
+      <div class="card-line"><span class="caps">Insurance</span><span class="ink" data-out="insurance">Delta Dental</span></div>
+      <div class="card-line"><span class="caps">Times</span><span class="ink" data-out="when">Any time</span></div>
+      <p class="message" id="message" aria-live="polite">Hi Rytel, I'd like to book a cleaning. I'm a new patient. I have Delta Dental. Thank you!</p>
+      <div class="buttons">
+        <a class="button primary" id="send-sms" href="sms:+12075996459">Open in Messages</a>
+        <button class="button" type="button" id="copy" hidden>Copy text</button>
+        <a class="button" id="send-email" href="mailto:toothstudiomaine@gmail.com?subject=Appointment%20request">Email instead</a>
+      </div>
+      <p class="status" id="status" role="status"></p>
+      <p class="desktop-note">On a computer? Copy the text and send it from your phone to (207) 599-6459, or use email.</p>
+    </div>
+  </div>
+</section>

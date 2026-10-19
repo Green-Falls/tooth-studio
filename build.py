@@ -104,6 +104,18 @@ FOOT = """</main>
 """
 
 IMG = re.compile(r'<img src="img/([a-z0-9-]+)\.jpg"([^>]*)>')
+ICONS = ROOT / "icons"
+ICON = re.compile(r'<span class="icon( [^"]*)?" data-icon="([a-z0-9-]+)"></span>')
+
+
+def add_icons(html):
+    def repl(m):
+        path = ICONS / f"{m.group(2)}.svg"
+        if not path.exists():
+            raise SystemExit(f"no icon icons/{m.group(2)}.svg")
+        svg = path.read_text().strip().replace("<svg ", '<svg aria-hidden="true" focusable="false" ', 1)
+        return f'<span class="icon{m.group(1) or ""}">{svg}</span>'
+    return ICON.sub(repl, html)
 
 
 def nav_items(current, items):
@@ -174,7 +186,7 @@ def build():
             c if c.startswith("<script") else c.replace("(207) 599-6459", '<span class="nw">(207) 599-6459</span>')
             for c in chunks
         )
-        (OUT / src.name).write_text(add_srcset(head + "<body>" + body_html))
+        (OUT / src.name).write_text(add_icons(add_srcset(head + "<body>" + body_html)))
         if not meta.get("noindex"):
             built.append(src.name)
         print("built", src.name)

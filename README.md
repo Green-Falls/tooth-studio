@@ -28,9 +28,19 @@ Upload the `site/` folder to any static host (Netlify, Cloudflare Pages, GitHub 
 
 ## Design
 
-Her own look, as on her Facebook and Instagram: white, black ink and the script logo. The one accent is the teal of the 55 Main Street sign, used for actions. Jost for headings, because its geometric capitals match "DENTAL HYGIENE CARE" in the logo. Source Sans 3 for reading, with a plain zero so the phone number reads cleanly. Space separates sections; rules appear only in tables and lists of facts. The home hero is the 55 Main Street entrance, the door patients walk through.
+Her own look, built from her logo. The logo is a script wordmark inside a thin ink frame that the script breaks at the top, with "DENTAL HYGIENE CARE" in spaced capitals on the bottom line. The home hero repeats that construction: the headline breaks the top of a thin frame and "55 MAIN STREET · BRIDGTON, MAINE" sits on the bottom line. No second script font: hers stays the only one.
 
-The visit request form follows 21st.dev's "Appointment Booking Split" layout (reassurance and contact details beside the form), with sending, sent and error states from its "Contact Form" and category chips from "Support Ticket Form". It is the only card on the site.
+White and black ink, with the teal of the 55 Main Street sign for actions. Jost for headings (its geometric capitals match the logo's), Source Sans 3 for reading (plain zero, so the phone number reads cleanly). Rules only in tables and fact lists. The hero photo is the 55 Main Street entrance.
+
+**Filling in for missing photos.** Until there are photos of the current office and of Rytel, colour and icons carry those spots:
+- A deep teal panel (the sign's teal, darkened) holds Rytel's quote on the home page and the key facts at the top of Services and New patients. Each panel carries the faint tooth outline that sits behind her wordmark.
+- Phosphor "light" icons (MIT, in `icons/`, inlined by the build) mark each service and the contact details. Their thin line matches the logo. Each icon means one thing: tooth for cleanings, magnifying glass for screening, scan for x-rays, shield for fluoride, brush for sealants, sparkle for whitening, baby for children, first-aid kit for dentist referrals, house for on-site visits, wheelchair for access.
+
+When real photos arrive, they should replace the panels first.
+
+The visit request form follows 21st.dev's "Appointment Booking Split" layout, with states from its "Contact Form" and chips from "Support Ticket Form". It is the only card on the site.
+
+`qa/competitors.md` compares the site with Bridgton Dental Associates, Main Street Dental and Mountain View Dentistry, and lists what to avoid so Tooth Studio doesn't look like them.
 
 ## House rules
 
@@ -52,4 +62,4 @@ The visit request form follows 21st.dev's "Appointment Booking Split" layout (re
 6. **"Runs the studio herself."** The site says she does the cleanings herself. Confirm there's no second hygienist.
 7. **Contact form.** Connect `FORM_ENDPOINT` (see Deploy) and confirm where requests should go and how fast she can reply.
 8. **Name.** The site uses "Rytel Rowe, IPDH", as she posts. NPI lists "Rytel P Reynolds".
-9. **Logo.** `img/logo.png` was traced from a 500px Facebook image. Swap in the original file.
+9. **Logo.** `img/logo.png` was traced from a 500px Facebook image. The site now leans on the logo, so the original vector file (SVG, PDF or AI) matters more than anything else on this list except photos.

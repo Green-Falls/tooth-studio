@@ -62,13 +62,18 @@ HEAD = """<!doctype html>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  <div class="wrap masthead">
-    <a class="mast-phone" href="tel:{tel}">Call or text <strong>{phone}</strong></a>
-    <a class="brand" href="index.html"><img src="img/logo.png" alt="{site}, dental hygiene care" width="556" height="158"></a>
-    <div class="mast-actions">
-      <a class="button primary small header-book" href="contact.html#request">Request a visit</a>
-      <details class="menu"><summary>Menu</summary><ul>{nav_menu}<li><a href="contact.html#request">Request a visit</a></li><li><a href="tel:{tel}">Call {phone}</a></li></ul></details>
+  <nav class="utility" aria-label="Contact">
+    <div class="wrap utility-inner">
+      <p class="utility-note"><span class="icon" data-icon="map-pin"></span>55 Main Street, Bridgton <span class="sep" aria-hidden="true">·</span> Taking new patients</p>
+      <ul>
+        <li><a href="tel:{tel}"><span class="icon" data-icon="phone"></span>Call or text {phone}</a></li>
+        <li><a class="utility-cta" href="contact.html#request"><span class="icon" data-icon="calendar-check"></span>Request a visit</a></li>
+      </ul>
     </div>
+  </nav>
+  <div class="wrap masthead">
+    <a class="brand" href="index.html"><img src="img/logo.png" alt="{site}, dental hygiene care" width="556" height="158"></a>
+    <details class="menu"><summary>Menu</summary><ul>{nav_menu}<li><a href="contact.html#request">Request a visit</a></li><li><a href="tel:{tel}">Call {phone}</a></li></ul></details>
   </div>
   <nav class="nav" aria-label="Main"><ul>{nav}</ul></nav>
 </header>

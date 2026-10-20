@@ -89,6 +89,11 @@ FOOT = """</main>
     <p class="legal">Tooth Studio &amp; Wellness LLC. Rytel Rowe, Independent Practice Dental Hygienist. In network with all Delta Dental plans and MaineCare.</p>
   </div>
 </footer>
+<nav class="action-bar" aria-label="Quick contact">
+  <a href="sms:{tel}"><span class="icon" data-icon="chat-circle-text"></span>Text</a>
+  <a href="tel:{tel}"><span class="icon" data-icon="phone"></span>Call</a>
+  <a href="contact.html#request"><span class="icon" data-icon="calendar-check"></span>Request</a>
+</nav>
 {scripts}</body>
 </html>
 """

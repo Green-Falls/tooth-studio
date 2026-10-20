@@ -23,8 +23,11 @@ PHOTOS = {
     "letterboard": ("2024-11-23_fb-page_4.jpg", None),
     "open-house-cookies": ("2024-11-23_fb-page_3.jpg", None),
     "woodlands": ("2024-07-26_fb-page_3.jpg", None),
-    "whitening-result": ("2025-09-14_fb-page_1.jpg", None),
-    "whitening-collage": ("2026-01-12_fb-page_1.jpg", None),
+    # Whitening: the photos inside her two flyers, cropped clear of the flyer text and logo.
+    "whitening-before": ("2025-09-14_fb-page_1.jpg", (0.05, 0.04, 0.95, 0.31)),
+    "whitening-after": ("2025-09-14_fb-page_1.jpg", (0.05, 0.475, 0.95, 0.72)),
+    "whitening-glo": ("2026-01-12_fb-page_1.jpg", (0.54, 0.0, 1.0, 0.33)),
+    "whitening-kit": ("2026-01-12_fb-page_1.jpg", (0.10, 0.50, 0.74, 0.83)),
 }
 
 

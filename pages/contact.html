@@ -109,15 +109,20 @@
     <div>
       <h2>Finding the door</h2>
       <p>The building is gray, with a covered wooden ramp under a teal 55 sign. The studio is on the first floor, and accessible parking is behind the building.</p>
-      <div class="buttons"><a class="button" href="https://www.google.com/maps/search/?api=1&amp;query=Tooth+Studio+%26+Wellness&amp;query_place_id=ChIJgU3LhvBTskwR1r2hOYnxwyM">Get directions</a></div>
       <figure style="margin-top:28px">
         <img src="img/55-main-street.jpg" sizes="(max-width: 760px) 100vw, 545px" alt="The front of 55 Main Street with its covered ramp entrance and building sign" width="1536" height="1721" loading="lazy">
       </figure>
     </div>
     <div class="map-box" id="map">
+      <span class="icon watermark" data-icon="tooth"></span>
       <div>
+        <span class="icon pin" data-icon="map-pin"></span>
+        <address>55 Main Street, 1st floor<br>Bridgton, ME 04009</address>
         <p>The map comes from Google, so it only loads if you ask for it.</p>
-        <button class="button" type="button" id="load-map" data-src="https://www.google.com/maps?q=55+Main+Street,+Bridgton,+ME+04009&amp;output=embed">Show the map</button>
+        <div class="buttons">
+          <a class="button primary" href="https://www.google.com/maps/search/?api=1&amp;query=Tooth+Studio+%26+Wellness&amp;query_place_id=ChIJgU3LhvBTskwR1r2hOYnxwyM">Get directions</a>
+          <button class="button" type="button" id="load-map" data-src="https://www.google.com/maps?q=55+Main+Street,+Bridgton,+ME+04009&amp;output=embed">Show the map</button>
+        </div>
       </div>
     </div>
   </div>

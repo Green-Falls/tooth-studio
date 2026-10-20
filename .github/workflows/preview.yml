@@ -1,0 +1,39 @@
+# Client preview of the Tooth Studio site on GitHub Pages at toothstudio.greenfalls.co.
+# Built with PREVIEW_HOST set: noindex on every page and robots.txt disallows all, so the
+# preview stays out of search. One-time setup (see README, "Client preview"):
+#   1. Settings → Pages → Source: GitHub Actions
+#   2. DNS at Namecheap: CNAME record, host "toothstudio", value "green-falls.github.io"
+#   3. Settings → Pages → Custom domain: toothstudio.greenfalls.co, then Enforce HTTPS
+name: preview
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: tooth-studio-pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: PREVIEW_HOST=toothstudio.greenfalls.co python build.py
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

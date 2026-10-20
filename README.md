@@ -18,6 +18,18 @@ Upload the `site/` folder to any static host (Netlify, Cloudflare Pages, GitHub 
 
 **Connect the contact form before launch.** A static site can't send email by itself. Create a free form at formspree.io with Rytel's email (toothstudiomaine@gmail.com) as the recipient, paste its URL into `FORM_ENDPOINT` in `build.py`, and rebuild. Any service that accepts a JSON POST and answers `{"ok": true}` works. Until then, the form tells visitors it isn't connected and gives the phone number. Once the domain is live, set `SITE_URL` in `build.py` and rebuild: that adds canonical links, absolute share images, `sitemap.xml` and the site URL in the structured data. See `qa/seo-aeo.md` for search and AI-answer optimisation, and the off-site steps (Google Business Profile, listings) that matter most for local search.
 
+## Client preview
+
+`.github/workflows/preview.yml` publishes the site to **https://toothstudio.greenfalls.co** on every push to `main`. It builds with `PREVIEW_HOST` set, so every page is marked noindex and `robots.txt` blocks crawlers. The preview stays out of search and won't compete with her real domain later.
+
+One-time setup:
+1. GitHub: Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+2. Namecheap (greenfalls.co DNS): add a **CNAME** record, host `toothstudio`, value `green-falls.github.io`.
+3. GitHub: Settings → Pages → Custom domain: `toothstudio.greenfalls.co`, save, then tick **Enforce HTTPS** once the certificate is issued (can take up to an hour).
+4. Run the workflow (Actions → preview → Run workflow), or push to `main`.
+
+The contact form says it isn't connected until `FORM_ENDPOINT` is set.
+
 ## Editing
 
 - Page content lives in `pages/*.html`. Each file starts with a one-line JSON comment: title, description, nav key, and optional `scripts` and `noindex`.

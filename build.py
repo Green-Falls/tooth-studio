@@ -12,6 +12,7 @@ WebP files images.py made for NAME. Run images.py first if photos changed.
 Output goes to site/. Run: python3 build.py
 """
 import json
+import os
 import pathlib
 import re
 
@@ -22,6 +23,11 @@ OUT = ROOT / "site"
 # Set this once the domain is live; it turns on canonical links, absolute share
 # images and the sitemap.
 SITE_URL = ""
+
+# Set by the preview workflow (PREVIEW_HOST=toothstudio.greenfalls.co): every page
+# gets noindex and robots.txt blocks crawlers, so the client preview never competes
+# in search with the real domain. Leave unset for the production build.
+PREVIEW_HOST = os.environ.get("PREVIEW_HOST", "")
 
 # The contact form posts here. Create a form at formspree.io (or any service that
 # accepts a JSON POST and answers {"ok": true}) and paste its URL, for example
@@ -240,7 +246,7 @@ def build():
         html = HEAD.format(
             title=meta["title"],
             description=meta["description"],
-            robots='<meta name="robots" content="noindex">\n' if meta.get("noindex") else "",
+            robots='<meta name="robots" content="noindex, nofollow">\n' if (meta.get("noindex") or PREVIEW_HOST) else "",
             canonical=f'<link rel="canonical" href="{url}">\n' if url else "",
             og_image=f"{SITE_URL}/img/share.jpg" if SITE_URL else "img/share.jpg",
             nav=nav_items(current, NAV),
@@ -268,8 +274,8 @@ def build():
             built.append(src.name)
         print("built", src.name)
 
-    robots = "User-agent: *\nAllow: /\n"
-    if SITE_URL:
+    robots = "User-agent: *\nDisallow: /\n" if PREVIEW_HOST else "User-agent: *\nAllow: /\n"
+    if SITE_URL and not PREVIEW_HOST:
         urls = "\n".join(f"  <url><loc>{SITE_URL}/{'' if n == 'index.html' else n}</loc></url>" for n in built)
         (OUT / "sitemap.xml").write_text(
             '<?xml version="1.0" encoding="UTF-8"?>\n'

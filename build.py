@@ -250,7 +250,7 @@ def build():
             canonical=f'<link rel="canonical" href="{url}">\n' if url else "",
             og_image=f"{SITE_URL}/img/share.jpg" if SITE_URL else "img/share.jpg",
             nav=nav_items(current, NAV),
-            nav_menu=nav_items(current, [("home", "index.html", "Home")] + NAV),
+            nav_menu=nav_items(current, NAV),
             **fill,
         )
         html += body

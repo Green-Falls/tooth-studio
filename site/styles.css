@@ -110,14 +110,18 @@ li { margin-bottom: .35em; }
       linear-gradient(var(--ink), var(--ink)) 100% 0 / 1px 100% no-repeat,
       linear-gradient(var(--ink), var(--ink)) 100% 100% / 100% 1px no-repeat,
       linear-gradient(var(--ink), var(--ink)) 0 100% / 1px 100% no-repeat;
-    animation: frame-draw 4s cubic-bezier(.4, 0, .3, 1) .4s both; }
+    animation: frame-draw 4s linear .4s both; }
   .hero .frame-foot, .hero .frame .buttons { animation: rise 1.6s cubic-bezier(.25, .6, .3, 1) 2s both; }
 }
+/* One continuous stroke from the top-right corner: down the right side, right to
+   left along the bottom, up the left side, then across the top. Each side's share
+   of the time matches its length (about 780 x 345px), so the line moves at a steady
+   pace. Layers: top, right, bottom, left. */
 @keyframes frame-draw {
   0% { background-size: 0 1px, 1px 0, 0 1px, 1px 0; }
-  30% { background-size: 100% 1px, 1px 0, 0 1px, 1px 0; }
-  55% { background-size: 100% 1px, 1px 100%, 0 1px, 1px 0; }
-  80% { background-size: 100% 1px, 1px 100%, 100% 1px, 1px 0; }
+  15% { background-size: 0 1px, 1px 100%, 0 1px, 1px 0; }
+  50% { background-size: 0 1px, 1px 100%, 100% 1px, 1px 0; }
+  65% { background-size: 0 1px, 1px 100%, 100% 1px, 1px 100%; }
   100% { background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%; }
 }
 @keyframes rise { from { opacity: .001; transform: translateY(6px); } to { opacity: 1; transform: none; } }

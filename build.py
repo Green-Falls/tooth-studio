@@ -11,6 +11,7 @@ WebP files images.py made for NAME. Run images.py first if photos changed.
 
 Output goes to site/. Run: python3 build.py
 """
+import hashlib
 import json
 import os
 import pathlib
@@ -37,6 +38,9 @@ FORM_ENDPOINT = ""
 SITE = "Tooth Studio & Wellness"
 PHONE = "(207) 599-6459"
 TEL = "+12075996459"
+
+# Changes with the stylesheet, so browsers never keep a stale copy
+CSS_V = hashlib.sha1((pathlib.Path(__file__).parent / "site" / "styles.css").read_bytes()).hexdigest()[:8]
 
 NAV = [
     ("services", "services.html", "Services"),
@@ -68,7 +72,7 @@ HEAD = """<!doctype html>
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preload" href="fonts/jost.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/source-sans.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v={css_v}">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -251,6 +255,7 @@ def build():
             og_image=f"{SITE_URL}/img/share.jpg" if SITE_URL else "img/share.jpg",
             nav=nav_items(current, NAV),
             nav_menu=nav_items(current, NAV),
+            css_v=CSS_V,
             **fill,
         )
         html += body
@@ -258,7 +263,7 @@ def build():
             html += schema(src.name, faq_items(body))
         scripts = "".join(f'<script src="{s}" defer></script>\n' for s in meta.get("scripts", []))
         html += FOOT.format(
-            nav_footer=nav_items(None, [("home", "index.html", "Home")] + NAV),
+            nav_footer=nav_items(None, NAV),
             scripts=scripts,
             **fill,
         )

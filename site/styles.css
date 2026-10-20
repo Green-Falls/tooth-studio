@@ -103,26 +103,33 @@ li { margin-bottom: .35em; }
 .frame { position: relative; border: 1px solid var(--ink); padding: clamp(28px, 3.5vw, 44px) clamp(22px, 3vw, 40px) clamp(36px, 4vw, 48px); margin-top: .7em; }
 .frame > h1:first-child { display: inline-block; margin: calc(-.58em - clamp(28px, 3.5vw, 44px)) 0 0 -14px; padding: 0 14px; background: var(--bg); }
 .frame > h1:first-child + * { margin-top: 16px; }
+/* The top line is one layer with two stubs, drawn by animating its stops:
+   --tr runs from under the heading to the right corner, --tl from the left
+   corner in under the heading. 60px clears the heading's edge at every width. */
+@property --tl { syntax: "<length-percentage>"; inherits: false; initial-value: 0px; }
+@property --tr { syntax: "<length-percentage>"; inherits: false; initial-value: calc(100% - 60px); }
 @media (prefers-reduced-motion: no-preference) {
   .hero .frame { border-color: transparent;
     background:
-      linear-gradient(var(--ink), var(--ink)) 0 0 / 100% 1px no-repeat,
+      linear-gradient(to right, var(--ink) var(--tl), transparent var(--tl) calc(100% - 60px), var(--ink) calc(100% - 60px) var(--tr), transparent var(--tr)) 0 0 / 100% 1px no-repeat,
       linear-gradient(var(--ink), var(--ink)) 100% 0 / 1px 100% no-repeat,
       linear-gradient(var(--ink), var(--ink)) 100% 100% / 100% 1px no-repeat,
       linear-gradient(var(--ink), var(--ink)) 0 100% / 1px 100% no-repeat;
     animation: frame-draw 4s linear .4s both; }
   .hero .frame-foot, .hero .frame .buttons { animation: rise 1.6s cubic-bezier(.25, .6, .3, 1) 2s both; }
 }
-/* One continuous stroke from the top-right corner: down the right side, right to
-   left along the bottom, up the left side, then across the top. Each side's share
-   of the time matches its length (about 780 x 345px), so the line moves at a steady
-   pace. Layers: top, right, bottom, left. */
+/* One continuous stroke: out from the heading to the top-right corner, down the
+   right side, right to left along the bottom, up the left side, then right along
+   the top into the heading. Each stretch's share of the time matches its length
+   (60 + 345 + 780 + 345 + 60px on desktop), so the line moves at a steady pace.
+   Layers: top, right, bottom, left. */
 @keyframes frame-draw {
-  0% { background-size: 0 1px, 1px 0, 0 1px, 1px 0; }
-  15% { background-size: 0 1px, 1px 100%, 0 1px, 1px 0; }
-  50% { background-size: 0 1px, 1px 100%, 100% 1px, 1px 0; }
-  65% { background-size: 0 1px, 1px 100%, 100% 1px, 1px 100%; }
-  100% { background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%; }
+  0% { --tl: 0px; --tr: calc(100% - 60px); background-size: 100% 1px, 1px 0, 0 1px, 1px 0; }
+  4% { --tl: 0px; --tr: 100%; background-size: 100% 1px, 1px 0, 0 1px, 1px 0; }
+  25.5% { --tl: 0px; --tr: 100%; background-size: 100% 1px, 1px 100%, 0 1px, 1px 0; }
+  74.5% { --tl: 0px; --tr: 100%; background-size: 100% 1px, 1px 100%, 100% 1px, 1px 0; }
+  96% { --tl: 0px; --tr: 100%; background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%; }
+  100% { --tl: 60px; --tr: 100%; background-size: 100% 1px, 1px 100%, 100% 1px, 1px 100%; }
 }
 @keyframes rise { from { opacity: .001; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .hero .frame-foot { animation-name: rise-foot; }

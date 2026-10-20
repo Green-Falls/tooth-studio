@@ -1,0 +1,21 @@
+# Tooth Studio & Wellness
+
+> Independent dental hygiene practice of Rytel Rowe, Independent Practice Dental Hygienist (IPDH), at 55 Main Street, 1st floor, Bridgton, Maine 04009. Cleanings, oral cancer screening, x-rays, fluoride, sealants and professional teeth whitening for adults and children. Taking new patients.
+
+- Phone (call or text): (207) 599-6459
+- Email: toothstudiomaine@gmail.com
+- Insurance: in network with all Delta Dental plans (including Martin's Point plans through Delta Dental); MaineCare provider; self-pay and a membership plan for patients without insurance
+- Booking: by text, phone, Facebook or Instagram message, or the visit request form. No fixed posted hours.
+- Access: ramp entrance; accessible parking behind the building
+- Not a dental office: an IPDH provides cleanings and preventive care and refers patients to a dentist for fillings and other treatment
+- On-site visits: residents of Woodlands Memory Care of Bridgton, since July 2024
+- Opened November 2024; at 55 Main Street since April 2025
+- NPI: 1770323479
+
+## Pages
+
+- [Services](services.html): cleanings, screening, x-rays, fluoride, sealants, children, referrals, visits outside the studio
+- [Teeth whitening](whitening.html): GLO Science Professional, usually one appointment
+- [New patients](new-patients.html): booking, hours, insurance and payment, questions and answers
+- [About](about.html): history, dates and patient reviews
+- [Contact](contact.html): visit request form, address and directions

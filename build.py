@@ -52,6 +52,11 @@ HEAD = """<!doctype html>
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:image" content="{og_image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The entrance to Tooth Studio &amp; Wellness at 55 Main Street, Bridgton, Maine">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#fbfaf6">
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -102,6 +107,76 @@ FOOT = """</main>
 {scripts}</body>
 </html>
 """
+
+def schema(page, faq=None):
+    """Structured data for search engines and AI answer engines. The studio and
+    Rytel appear on every page; some pages add their own type. Every fact here
+    comes from data/research/facebook/NOTES.md. No self-published star ratings:
+    Google ignores them for local businesses."""
+    base = SITE_URL or ""
+    studio_id, rytel_id = f"{base}/#studio", f"{base}/#rytel"
+    services = ["Teeth cleaning", "Gingivitis cleaning", "Periodontal cleaning", "Oral cancer screening",
+                "Dental x-rays", "Fluoride treatment", "Dental sealants", "Professional teeth whitening",
+                "On-site dental hygiene visits at care facilities"]
+    studio = {
+        "@type": "MedicalClinic",
+        "@id": studio_id,
+        "name": SITE,
+        "alternateName": "Tooth Studio",
+        "legalName": "Tooth Studio & Wellness LLC",
+        "description": "Independent practice dental hygienist (IPDH) office in Bridgton, Maine. Cleanings, x-rays, fluoride, sealants and whitening for adults and children.",
+        "telephone": "+1-207-599-6459",
+        "email": "toothstudiomaine@gmail.com",
+        "image": f"{base}/img/share.jpg" if base else "img/share.jpg",
+        "logo": f"{base}/img/logo.png" if base else "img/logo.png",
+        "address": {"@type": "PostalAddress", "streetAddress": "55 Main Street, 1st floor", "addressLocality": "Bridgton",
+                    "addressRegion": "ME", "postalCode": "04009", "addressCountry": "US"},
+        "areaServed": [{"@type": "City", "name": "Bridgton, Maine"}, {"@type": "Place", "name": "Lakes Region, Maine"}],
+        "hasMap": "https://www.google.com/maps/search/?api=1&query=Tooth+Studio+%26+Wellness&query_place_id=ChIJgU3LhvBTskwR1r2hOYnxwyM",
+        "isAcceptingNewPatients": True,
+        "paymentAccepted": "Delta Dental, MaineCare, self-pay",
+        "knowsAbout": services,
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Dental hygiene services",
+                            "itemListElement": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": s}} for s in services]},
+        "identifier": {"@type": "PropertyValue", "propertyID": "NPI", "value": "1770323479"},
+        "founder": {"@id": rytel_id},
+        "sameAs": ["https://www.facebook.com/profile.php?id=61562688787508", "https://www.instagram.com/toothstudioandwellness/"],
+    }
+    if base:
+        studio["url"] = f"{base}/"
+    rytel = {
+        "@type": "Person",
+        "@id": rytel_id,
+        "name": "Rytel Rowe",
+        "jobTitle": "Independent Practice Dental Hygienist",
+        "hasCredential": {"@type": "EducationalOccupationalCredential", "credentialCategory": "license",
+                          "name": "Independent Practice Dental Hygienist (IPDH)"},
+        "worksFor": {"@id": studio_id},
+    }
+    graph = [studio, rytel]
+    if page == "about.html":
+        graph.append({"@type": "AboutPage", "name": "About Tooth Studio & Wellness", "about": {"@id": studio_id}, "mainEntity": {"@id": rytel_id}})
+    elif page == "contact.html":
+        graph.append({"@type": "ContactPage", "name": "Request a visit", "about": {"@id": studio_id}})
+    elif page == "whitening.html":
+        graph.append({"@type": "Service", "name": "Professional teeth whitening", "serviceType": "Teeth whitening",
+                      "description": "In-office whitening with the GLO Science Professional system, usually in one appointment.",
+                      "provider": {"@id": studio_id}, "areaServed": {"@type": "City", "name": "Bridgton, Maine"}})
+    if faq:
+        graph.append({"@type": "FAQPage", "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": ans}} for q, ans in faq]})
+    data = {"@context": "https://schema.org", "@graph": graph}
+    return '<script type="application/ld+json">\n' + json.dumps(data, indent=2, ensure_ascii=False) + "\n</script>\n"
+
+
+def faq_items(body):
+    """Question and answer pairs from <details><summary>Q</summary><p>A</p></details>, as plain text."""
+    out = []
+    for q, a in re.findall(r"<details><summary>(.*?)</summary><p>(.*?)</p></details>", body, re.S):
+        text = lambda h: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", h)).replace("&amp;", "&").strip()
+        out.append((text(q), text(a)))
+    return out
+
 
 IMG = re.compile(r'<img src="img/([a-z0-9-]+)\.jpg"([^>]*)>')
 ICONS = ROOT / "icons"
@@ -167,12 +242,14 @@ def build():
             description=meta["description"],
             robots='<meta name="robots" content="noindex">\n' if meta.get("noindex") else "",
             canonical=f'<link rel="canonical" href="{url}">\n' if url else "",
-            og_image=f"{SITE_URL}/img/entrance-1200.webp" if SITE_URL else "img/entrance-1200.webp",
+            og_image=f"{SITE_URL}/img/share.jpg" if SITE_URL else "img/share.jpg",
             nav=nav_items(current, NAV),
             nav_menu=nav_items(current, [("home", "index.html", "Home")] + NAV),
             **fill,
         )
         html += body
+        if not meta.get("noindex"):
+            html += schema(src.name, faq_items(body))
         scripts = "".join(f'<script src="{s}" defer></script>\n' for s in meta.get("scripts", []))
         html += FOOT.format(
             nav_footer=nav_items(None, [("home", "index.html", "Home")] + NAV),
@@ -200,6 +277,33 @@ def build():
         )
         robots += f"Sitemap: {SITE_URL}/sitemap.xml\n"
     (OUT / "robots.txt").write_text(robots)
+
+    # A plain summary for AI tools that read /llms.txt (https://llmstxt.org).
+    link = lambda page: f"{SITE_URL}/{page}" if SITE_URL else page
+    (OUT / "llms.txt").write_text(f"""# Tooth Studio & Wellness
+
+> Independent dental hygiene practice of Rytel Rowe, Independent Practice Dental Hygienist (IPDH), at 55 Main Street, 1st floor, Bridgton, Maine 04009. Cleanings, oral cancer screening, x-rays, fluoride, sealants and professional teeth whitening for adults and children. Taking new patients.
+
+- Phone (call or text): {PHONE}
+- Email: toothstudiomaine@gmail.com
+- Insurance: in network with all Delta Dental plans (including Martin's Point plans through Delta Dental); MaineCare provider; self-pay and a membership plan for patients without insurance
+- Booking: by text, phone, Facebook or Instagram message, or the visit request form. No fixed posted hours.
+- Access: ramp entrance; accessible parking behind the building
+- Not a dental office: an IPDH provides cleanings and preventive care and refers patients to a dentist for fillings and other treatment
+- On-site visits: residents of Woodlands Memory Care of Bridgton, since July 2024
+- Opened November 2024; at 55 Main Street since April 2025
+- NPI: 1770323479
+
+## Pages
+
+- [Services]({link("services.html")}): cleanings, screening, x-rays, fluoride, sealants, children, referrals, visits outside the studio
+- [Teeth whitening]({link("whitening.html")}): GLO Science Professional, usually one appointment
+- [New patients]({link("new-patients.html")}): booking, hours, insurance and payment, questions and answers
+- [About]({link("about.html")}): history, dates and patient reviews
+- [Contact]({link("contact.html")}): visit request form, address and directions
+""")
+    if not SITE_URL:
+        print("note: SITE_URL is empty, so there are no canonical links or sitemap.xml yet")
 
 
 if __name__ == "__main__":

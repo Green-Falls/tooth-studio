@@ -60,6 +60,14 @@ def main():
         fallback.save(OUT / f"{name}.jpg", quality=78, optimize=True, progressive=True)
         print(f"{name}: {im.width}x{im.height}, webp {made}")
 
+    # Share image for Facebook, iMessage and search: a 1200x630 JPEG (WebP previews are unreliable).
+    src = correct(ImageOps.exif_transpose(Image.open(SRC / "2025-10-05_fb-page_1.jpg")).convert("RGB"))
+    w = src.width
+    h = round(w * 630 / 1200)
+    top = int(src.height * 0.30)
+    src.crop((0, top, w, top + h)).resize((1200, 630), Image.LANCZOS).save(OUT / "share.jpg", quality=82, optimize=True, progressive=True)
+    print("share: 1200x630")
+
 
 if __name__ == "__main__":
     main()

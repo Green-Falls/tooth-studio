@@ -177,9 +177,11 @@ li { margin-bottom: .35em; }
 .bento .about-tile a { color: var(--on-deep); }
 .figure-tile { background: var(--teal-tint); display: flex; flex-direction: column; justify-content: space-between; gap: 16px; }
 .figure-tile .num { font: 350 clamp(2.6rem, 4.4vw, 3.6rem)/1 var(--display); color: var(--teal-dark); font-variant-numeric: lining-nums; }
-.figure-tile p { margin: 0; color: var(--ink); }
+.figure-tile .eyebrow { font: 500 .72rem/1 var(--display); letter-spacing: .28em; text-transform: uppercase; color: var(--teal-dark); }
+.figure-tile .num { display: block; margin-bottom: 8px; }
+.figure-tile p { margin: 0; color: var(--ink); min-height: 2lh; }
 .figure-tile a { color: var(--teal-dark); }
-.wide-tile { grid-column: span 2; border: 1px solid var(--line); display: flex; gap: 16px; align-items: flex-start; }
+.wide-tile { grid-column: span 2; border: 1px solid var(--line); display: flex; gap: 16px; align-items: center; }
 .wide-tile h3 { margin-bottom: .2em; }
 .wide-tile p { margin: 0; color: var(--muted); }
 

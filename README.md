@@ -38,6 +38,8 @@ White and black ink, with the teal of the 55 Main Street sign for actions. Jost 
 
 When real photos arrive, they should replace the panels first.
 
+**Layout (v6).** Her logo is a centred composition, so the masthead is centred too: phone on the left, logo in the middle, "Request a visit" on the right, links in a centred row beneath. The home hero centres the logo frame, with the entrance photo as a wide band below. The footer is centred to match. Everything else stays left-aligned. From 21st.dev: "Centered Nav Header" (adapted), "Editorial Image Hero", "Feature Overview Bento" (the "Your hygienist" grid of a quote tile and real figures), "Bento Feature Grid" (service tiles) and "Simple Centered Footer". Numbers on the site are real: 10+ years, 5.0 from 12 Google reviews, 2,000 supervised hours for the IPDH licence. The deep teal booking band numbers its steps because they are a real sequence.
+
 The visit request form follows 21st.dev's "Appointment Booking Split" layout, with states from its "Contact Form" and chips from "Support Ticket Form". It is the only card on the site.
 
 `qa/competitors.md` compares the site with Bridgton Dental Associates, Main Street Dental and Mountain View Dentistry, and lists what to avoid so Tooth Studio doesn't look like them.

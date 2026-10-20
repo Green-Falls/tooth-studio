@@ -62,40 +62,30 @@ HEAD = """<!doctype html>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
-  <div class="wrap header-inner">
+  <div class="wrap masthead">
+    <a class="mast-phone" href="tel:{tel}">Call or text <strong>{phone}</strong></a>
     <a class="brand" href="index.html"><img src="img/logo.png" alt="{site}, dental hygiene care" width="556" height="158"></a>
-    <nav class="nav" aria-label="Main"><ul>{nav}</ul></nav>
-    <div class="header-actions">
-      <a class="header-phone" href="tel:{tel}">{phone}</a>
+    <div class="mast-actions">
       <a class="button primary small header-book" href="contact.html#request">Request a visit</a>
       <details class="menu"><summary>Menu</summary><ul>{nav_menu}<li><a href="contact.html#request">Request a visit</a></li><li><a href="tel:{tel}">Call {phone}</a></li></ul></details>
     </div>
   </div>
+  <nav class="nav" aria-label="Main"><ul>{nav}</ul></nav>
 </header>
 <main id="main">
 """
 
 FOOT = """</main>
 <footer class="site-footer">
-  <div class="wrap">
-    <div class="footer-grid">
-      <div>
-        <img class="footer-logo" src="img/logo.png" alt="{site}" width="556" height="158" loading="lazy">
-        <address>55 Main Street, 1st floor<br>Bridgton, ME 04009</address>
-      </div>
-      <div>
-        <h2>Contact</h2>
-        <ul>
-          <li><a href="tel:{tel}">{phone}</a>, call or text</li>
-          <li><a href="mailto:toothstudiomaine@gmail.com">toothstudiomaine@gmail.com</a></li>
-          <li><a href="https://www.facebook.com/profile.php?id=61562688787508">Facebook</a> · <a href="https://www.instagram.com/toothstudioandwellness/">Instagram</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2>Pages</h2>
-        <ul>{nav_footer}</ul>
-      </div>
-    </div>
+  <div class="wrap footer-center">
+    <img class="footer-logo" src="img/logo.png" alt="{site}" width="556" height="158" loading="lazy">
+    <nav aria-label="Footer"><ul class="footer-nav">{nav_footer}</ul></nav>
+    <ul class="footer-contact">
+      <li><span class="icon" data-icon="map-pin"></span>55 Main Street, 1st floor, Bridgton, ME 04009</li>
+      <li><span class="icon" data-icon="phone"></span><a href="tel:{tel}">{phone}</a>, call or text</li>
+      <li><span class="icon" data-icon="envelope-simple"></span><a href="mailto:toothstudiomaine@gmail.com">toothstudiomaine@gmail.com</a></li>
+    </ul>
+    <p class="footer-social"><a href="https://www.facebook.com/profile.php?id=61562688787508">Facebook</a> · <a href="https://www.instagram.com/toothstudioandwellness/">Instagram</a></p>
     <p class="legal">Tooth Studio &amp; Wellness LLC. Rytel Rowe, Independent Practice Dental Hygienist. In network with all Delta Dental plans and MaineCare.</p>
   </div>
 </footer>
